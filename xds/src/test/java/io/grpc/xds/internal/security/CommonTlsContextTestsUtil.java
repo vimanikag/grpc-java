@@ -60,6 +60,8 @@ public class CommonTlsContextTestsUtil {
   public static final String BAD_SERVER_KEY_FILE = "badserver.key";
   public static final String BAD_CLIENT_PEM_FILE = "badclient.pem";
   public static final String BAD_CLIENT_KEY_FILE = "badclient.key";
+  public static final String VALID_WC_DNS_PEM_FILE = "valid_wcdns_certificate.pem";
+  public static final String INVALID_WC_DNS_PEM_FILE = "invalid_wcdns_certificate.pem";
 
   /** takes additional values and creates CombinedCertificateValidationContext as needed. */
   private static CommonTlsContext buildCommonTlsContextWithAdditionalValues(
