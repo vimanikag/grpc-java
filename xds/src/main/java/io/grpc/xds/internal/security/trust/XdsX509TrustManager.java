@@ -320,10 +320,7 @@ final class XdsX509TrustManager extends X509ExtendedTrustManager implements X509
 
   private static boolean verifyDnsNameWildcard(
       String altNameFromCert, String sanToVerify, boolean ignoreCase) {
-    if (altNameFromCert == null
-        || altNameFromCert.isEmpty()
-        || sanToVerify == null
-        || sanToVerify.isEmpty()) {
+    if (Strings.isNullOrEmpty(altNameFromCert) || Strings.isNullOrEmpty(sanToVerify)) {
       return false;
     }
     String[] certLabels = (ignoreCase ? altNameFromCert.toLowerCase() : altNameFromCert)
