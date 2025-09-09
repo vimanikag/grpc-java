@@ -18,13 +18,13 @@ package io.grpc.xds.internal.security.trust;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.BAD_SERVER_PEM_FILE;
+import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.BAD_WILDCARD_DNS_PEM_FILE;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.CA_PEM_FILE;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.CLIENT_PEM_FILE;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.CLIENT_SPIFFE_PEM_FILE;
-import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.INVALID_WC_DNS_PEM_FILE;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.SERVER_1_PEM_FILE;
 import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.SERVER_1_SPIFFE_PEM_FILE;
-import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.VALID_WC_DNS_PEM_FILE;
+import static io.grpc.xds.internal.security.CommonTlsContextTestsUtil.WILDCARD_DNS_PEM_FILE;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doReturn;
@@ -697,18 +697,18 @@ public class XdsX509TrustManagerTest {
   public void testVerifyDnsName_succeedsForValidWildcardSanNames()
           throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("*.lyft.com")
-                    .setIgnoreCase(false)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("*.lyft.com")
+            .setIgnoreCase(false)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(VALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(WILDCARD_DNS_PEM_FILE));
     trustManager.verifySubjectAltNameInChain(certs);
   }
 
@@ -716,18 +716,18 @@ public class XdsX509TrustManagerTest {
   public void testVerifyDnsName_succeedsForValidWildcardSanNames_ignoreCase()
           throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("*.lyft.com")
-                    .setIgnoreCase(true)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("*.lyft.com")
+            .setIgnoreCase(true)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(VALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(WILDCARD_DNS_PEM_FILE));
     trustManager.verifySubjectAltNameInChain(certs);
   }
 
@@ -735,18 +735,18 @@ public class XdsX509TrustManagerTest {
   public void testVerifyDnsName_failsForInvalidWildcard_SanNames()
           throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("lyft.com")
-                    .setIgnoreCase(false)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("lyft.com")
+            .setIgnoreCase(false)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(INVALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(BAD_WILDCARD_DNS_PEM_FILE));
     try {
       trustManager.verifySubjectAltNameInChain(certs);
       fail("no exception thrown");
@@ -759,18 +759,18 @@ public class XdsX509TrustManagerTest {
   public void testVerifyDnsName_failsForInvalidWildcardSanNames_ignoreCase()
           throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("lyft.com")
-                    .setIgnoreCase(true)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("lyft.com")
+            .setIgnoreCase(true)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(INVALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(BAD_WILDCARD_DNS_PEM_FILE));
     try {
       trustManager.verifySubjectAltNameInChain(certs);
       fail("no exception thrown");
@@ -782,18 +782,18 @@ public class XdsX509TrustManagerTest {
   @Test
   public void testVerifyDnsName_failsForExtraLabel() throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("test.lyft.com.extra")
-                    .setIgnoreCase(false)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("test.lyft.com.extra")
+            .setIgnoreCase(false)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(INVALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(BAD_WILDCARD_DNS_PEM_FILE));
     try {
       trustManager.verifySubjectAltNameInChain(certs);
       fail("no exception thrown");
@@ -806,18 +806,18 @@ public class XdsX509TrustManagerTest {
   public void testVerifyDnsName_failsForExtraLabel_ignoreCase()
           throws CertificateException, IOException {
     StringMatcher stringMatcher =
-            StringMatcher.newBuilder()
-                    .setExact("test.lyft.com.extra")
-                    .setIgnoreCase(true)
-                    .build();
+        StringMatcher.newBuilder()
+            .setExact("test.lyft.com.extra")
+            .setIgnoreCase(true)
+            .build();
     @SuppressWarnings("deprecation")
     CertificateValidationContext certContext =
-            CertificateValidationContext.newBuilder()
-                    .addMatchSubjectAltNames(stringMatcher)
-                    .build();
+        CertificateValidationContext.newBuilder()
+            .addMatchSubjectAltNames(stringMatcher)
+            .build();
     trustManager = new XdsX509TrustManager(certContext, mockDelegate);
     X509Certificate[] certs =
-            CertificateUtils.toX509Certificates(TlsTesting.loadCert(INVALID_WC_DNS_PEM_FILE));
+        CertificateUtils.toX509Certificates(TlsTesting.loadCert(BAD_WILDCARD_DNS_PEM_FILE));
     try {
       trustManager.verifySubjectAltNameInChain(certs);
       fail("no exception thrown");
